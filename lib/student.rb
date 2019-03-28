@@ -3,7 +3,7 @@ class Student
 attr_accessor :name, :grade
 attr_reader :id 
   
-  def initialize(name:, grade:, id: nil)
+  def initialize(name, grade, id=nil)
     @name = name
     @grade = grade
     @id = id
@@ -11,10 +11,10 @@ attr_reader :id
 
   def self.create_table
     sql = <<-SQL 
-      CREATE TABLE IF NOT EXISTS students( 
-        id INTEGER PRIMARY KEY
-        name  TEXT,
-        grade INTEGER)
+      CREATE TABLE IF NOT EXISTS students ( 
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        grade TEXT)
     SQL
 
     DB[:conn].execute(sql)
@@ -36,12 +36,11 @@ attr_reader :id
 
     DB[:conn].execute(sql, self.name, self.grade)
 
-    #@id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
-    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM students")[0][0]
   end
 
   def self.create(name:, grade:)
-    student = new.Student(name, grade)
+    student = Student.new(name, grade)
     student.save
     student
   end
